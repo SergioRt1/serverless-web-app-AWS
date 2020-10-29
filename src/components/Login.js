@@ -9,8 +9,9 @@ import brain from '../static/icon.png';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserPool from "../AWS/CognitoConfig";
 import './../styles/Login.css';
-import Utils from '../utils/congito'
+import Utils from '../utils/Congito'
 import {CognitoUser, AuthenticationDetails} from 'amazon-cognito-identity-js'
+import CognitoUtils from "../utils/Congito";
 
 class Login extends React.Component {
   constructor(props) {
@@ -22,10 +23,7 @@ class Login extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({loading: true});
-    const user = new CognitoUser({
-      Username: Utils.toUsername(this.state.email),
-      Pool: UserPool
-    })
+    const user = CognitoUtils.getUser(this.state.email)
     const auth = new AuthenticationDetails({
       Username: this.state.email,
       Password: this.state.password,

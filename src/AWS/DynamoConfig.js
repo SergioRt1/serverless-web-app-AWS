@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const randomBytes = require('crypto').randomBytes;
 const DynamoDBStream = require('dynamodb-stream')
 
 class Dynamo {

@@ -1,0 +1,9 @@
+type Post @model {
+  id: ID!
+  title: String!
+  content: String!
+  owner: String!
+}
+type Users @model {
+  content: String!
+}

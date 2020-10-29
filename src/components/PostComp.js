@@ -5,8 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 
-class Post extends React.Component {
-  useStyles = makeStyles({
+class PostComp extends React.Component {
+  classes = makeStyles({
     root: {
       minWidth: 275,
     },
@@ -25,7 +25,6 @@ class Post extends React.Component {
 
   constructor(props) {
     super(props);
-    this.classes = this.useStyles();
   }
 
   render() {
@@ -36,7 +35,7 @@ class Post extends React.Component {
             {this.props.data.title}
           </Typography>
           <Typography className={this.classes.pos} color="textSecondary">
-            {this.props.data.username}
+            {this.props.data.owner}
           </Typography>
           <Typography variant="body2" component="p">
             {this.props.data.content}
@@ -47,4 +46,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+export default PostComp;

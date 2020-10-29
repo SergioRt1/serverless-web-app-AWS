@@ -1,10 +1,9 @@
 import React from 'react';
 import './App.css';
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core/styles";
-import {AxiosInstance} from "./AxiosInstance";
 import Login from "./components/Login";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import SingIn from "./components/SingIn";
+import SingUp from "./components/SingUp";
 import HomePage from "./components/HomePage";
 
 const theme = createMuiTheme({
@@ -37,7 +36,6 @@ class App extends React.Component {
       isLoggedIn: localStorage.getItem('isLoggedIn')
     };
     this.reloadPage = this.reloadPage.bind(this);
-    AxiosInstance.setCallback(this.reloadPage)
   }
 
   reloadPage = () => {
@@ -56,7 +54,7 @@ class App extends React.Component {
           : <BrowserRouter>
             <Switch>
               <Route exact path="/" render={() => <Login reloadPage={this.reloadPage}/>}/>
-              <Route exact path="/sing-in" render={() => <SingIn/>}/>
+              <Route exact path="/sing-in" render={() => <SingUp/>}/>
             </Switch>
           </BrowserRouter>
         }

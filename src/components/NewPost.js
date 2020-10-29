@@ -1,15 +1,18 @@
 import React from 'react';
-import {AxiosInstance} from "../AxiosInstance";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import {DataStore} from "@aws-amplify/datastore";
+import {Post} from "../models";
+
+const randomBytes = require('crypto').randomBytes;
 
 class NewPost extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {name: "", post: ""};
+    this.state = {name: "", content: ""};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -17,14 +20,20 @@ class NewPost extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
+    const post = new Post({
       "title": this.state.title,
-      "post": this.state.post,
+      "content": this.state.content,
       "owner": localStorage.getItem('username')
-    };
-    const newPost = await AxiosInstance.getInstance().post("/models", data);
-    this.props.callback(newPost);
-    this.setState({post: "", title: "", email: "", status: "", dueDate: new Date()});
+    });
+
+    try {
+      const newPost = await DataStore.save(post);
+      console.log("Post saved successfully!");
+      this.props.callback(newPost);
+    } catch (error) {
+      console.log("Error saving post", error);
+    }
+    this.setState({content: "", title: ""});
   }
 
   render() {
@@ -36,9 +45,9 @@ class NewPost extends React.Component {
           <TextField required label="Title" fullWidth
                      value={this.state.title}
                      onChange={event => this.setState({title: event.target.value})}/>
-          <TextField required label="Post" fullWidth
-                     value={this.state.post}
-                     onChange={event => this.setState({post: event.target.value})}/>
+          <TextField required label="Content" fullWidth
+                     value={this.state.content}
+                     onChange={event => this.setState({content: event.target.value})}/>
           <br/><br/>
           <Button type="submit" color="primary" variant="contained" fullWidth>
             Post!
