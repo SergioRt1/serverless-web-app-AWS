@@ -3,8 +3,6 @@ import AWSAppSyncClient from "aws-appsync";
 import {onCreatePost, onUpdateUserCount} from "./graphql/subscriptions";
 import {getUserCount, listPosts} from "./graphql/queries";
 import gql from 'graphql-tag';
-import {DataStore} from "@aws-amplify/datastore";
-import {Post} from "./models";
 import {createPost, updateUserCount} from "./graphql/mutations";
 
 class AppSyncAPI {
@@ -28,100 +26,98 @@ class AppSyncAPI {
 
   static createPost = async (post) => {
     const client = await AppSyncAPI.initClient.hydrated();
-    const newPost = await DataStore.save(post);
-    await AppSyncAPI.createAsync(client, newPost);
 
-    return newPost;
+    return await AppSyncAPI.createAsync(client, post);
   }
 
   static async createAsync(client, newPost) {
-    await client.query({query: gql(createPost), fetchPolicy: "network-only", variables: {input: newPost}});
+    const result = await client.mutate({mutation: gql(createPost), fetchPolicy: "no-cache", variables: {input: newPost}});
+    if(!result.errors)
+      return result.data.createPost
+    else
+      throw result.errors
   }
 
-  listenAppSync = async (countCallback) => {
+  listenAppSync = async (countCallback, postCallback) => {
     const client = await AppSyncAPI.initClient.hydrated();
 
     [this.postListener, this.userListener] = await Promise.all([
-      this.listenPosts(client),
+      this.listenPosts(client, postCallback),
       this.listenUserCount(client, countCallback),
     ]);
   }
 
-  listenPosts = async (client) => {
-    try {
-      const [initialPosts, currentPosts] = await Promise.all([
-        client.query({query: gql(listPosts), fetchPolicy: "network-only"}),
-        DataStore.query(Post),
-      ]);
-      if (!initialPosts.errors) {
-        this.synchronizePosts(currentPosts, initialPosts, client);
-
-        const observablePosts = client.subscribe({query: gql(onCreatePost), fetchPolicy: "network-only"})
-        observablePosts.subscribe({
-          next(value) {
-            console.log("Received subscription GraphQL: ", value)
-            //DataStore.save(post);
-          },
-          error(errorValue) {
-            console.error("Error subscription", errorValue)
-          }
-        })
-
-        return observablePosts;
-      }
-    } catch (e) {
-      console.error(e);
+  loadPosts = async (callback) => {
+    const client = await AppSyncAPI.initClient.hydrated();
+    const initialPosts = await client.query({query: gql(listPosts), fetchPolicy: "network-only"});
+    if (!initialPosts.errors) {
+      callback(initialPosts.data.listPosts.items);
+    } else {
+      console.error(initialPosts.errors)
     }
   }
 
-  synchronizePosts(currentPosts, initialPosts, client) {
-    const currentIds = new Map(currentPosts.map((post) => [post.id, post]));
-    const areOnline = new Map(currentPosts.map((post) => [post.id, false]));
-    initialPosts.data.listPosts.items.forEach((post) => {
-      console.log("Received GraphQL: ", post)
-      if (!currentIds.has(post.id)) {
-        areOnline[post.id] = true;
-        DataStore.save(new Post({
-          "id": post.id,
-          "title": post.title,
-          "content": post.content,
-          "owner": post.owner,
-        }));
-      }
-    })
-    areOnline.forEach((v, k) => {
-      if (!v) {
-        AppSyncAPI.createAsync(client, currentIds[k]);
-      }
-    });
-  }
-
-  listenUserCount = async (client, callback) => {
+  loadUserCount = async (callback) => {
+    const client = await AppSyncAPI.initClient.hydrated();
     const count = await client.query({
       query: gql(getUserCount),
       fetchPolicy: "network-only",
-      variables: {input: {id: "unic_count"}}
+      variables: {id: "unic_count"},
     })
     if (!count.errors) {
-      console.log("Received GraphQL data: ", count.data)
-      client.query({
-        query: gql(updateUserCount),
-        fetchPolicy: "network-only",
-        variables: {input: {id: "unic_count", count: count.data.getUserCount.count + 1}},
-      });
-      const observableUserCount = client.subscribe({query: gql(onUpdateUserCount), fetchPolicy: "network-only"})
-      observableUserCount.subscribe({
-        next(value) {
-          //callback(value)
-          console.log("Received subscription GraphQL count: ", value)
-        },
-        error(errorValue) {
-          console.error("Error subscription", errorValue)
-        }
-      })
-
-      return observableUserCount;
+      callback(count.data.getUserCount);
+    } else {
+      console.error(count.errors);
     }
+  }
+
+  increaseUserCountBy = async (number) => {
+    const client = await AppSyncAPI.initClient.hydrated();
+    const count = await client.query({
+      query: gql(getUserCount),
+      fetchPolicy: "network-only",
+      variables: {id: "unic_count"},
+    })
+    if (!count.errors) {
+      const current = count.data.getUserCount
+      console.log("Received GraphQL data: ", count.data)
+      const newCount = await client.mutate({
+        mutation: gql(updateUserCount),
+        fetchPolicy: "no-cache",
+        variables: {input: {id: current.id, count: current.count + number}},
+      });
+      console.log("Received GraphQL data: ", newCount)
+    }
+  }
+
+  listenPosts = async (client, callback) => {
+    const observablePosts = client.subscribe({query: gql(onCreatePost), fetchPolicy: "network-only"})
+    observablePosts.subscribe({
+      next(value) {
+        console.log("Received subscription GraphQL: post", value)
+        callback(value.data.onCreatePost)
+      },
+      error(errorValue) {
+        console.error("Error subscription", errorValue)
+      }
+    })
+
+    return observablePosts;
+  }
+
+  listenUserCount = async (client, callback) => {
+    const observableUserCount = client.subscribe({query: gql(onUpdateUserCount), fetchPolicy: "network-only"})
+    observableUserCount.subscribe({
+      next(value) {
+        console.log("Received subscription GraphQL count: ", value)
+        callback(value.data.onUpdateUserCount.count)
+      },
+      error(errorValue) {
+        console.error("Error subscription", errorValue)
+      }
+    })
+
+    return observableUserCount;
   }
 }
 

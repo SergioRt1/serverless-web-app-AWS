@@ -36,21 +36,39 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: localStorage.getItem('isLoggedIn'),
       userCount: 0,
+      posts: []
     };
     this.appSync = new AppSyncAPI();
     this.reloadPage = this.reloadPage.bind(this);
   }
 
   countCallback = (userCount) => {
-    this.setState({userCount})
+    this.setState({userCount: userCount})
+  }
+
+  postsCallback = (posts) => {
+    this.setState({posts: posts})
+  }
+
+  addPost = (newPost) => {
+    this.setState((state) => {
+      return {posts: [...state.posts, newPost]};
+    })
+  }
+
+  loadData = () => {
+    this.appSync.loadPosts(this.postsCallback);
+    this.appSync.loadUserCount(this.countCallback);
+    this.appSync.listenAppSync(this.countCallback, this.addPost);
   }
 
   logout = () => {
-    this.appSync.cancel()
+    this.appSync.cancel();
+    this.appSync.increaseUserCountBy(-1);
   }
 
   login = () => {
-    this.appSync.listenAppSync(this.countCallback)
+    this.appSync.increaseUserCountBy(1);
   }
 
   reloadPage = () => {
@@ -63,7 +81,9 @@ class App extends React.Component {
         {this.state.isLoggedIn === 'true' ?
           <BrowserRouter>
             <Switch>
-              <Route exact path="/" render={() => <HomePage reloadPage={this.reloadPage} logout={this.logout} userCount={this.state.userCount}/>}/>
+              <Route exact path="/" render={() => <HomePage reloadPage={this.reloadPage} logout={this.logout}
+                                                            userCount={this.state.userCount}
+                                                            posts={this.state.posts} loadData={this.loadData}/>}/>
             </Switch>
           </BrowserRouter>
           : <BrowserRouter>

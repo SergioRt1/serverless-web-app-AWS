@@ -10,14 +10,13 @@ class NewPost extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {name: "", content: ""};
+    this.state = {title: "", content: ""};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
   handleSubmit = async (e) => {
     e.preventDefault();
-
     const post = new Post({
       "title": this.state.title,
       "content": this.state.content,
@@ -26,8 +25,8 @@ class NewPost extends React.Component {
 
     try {
       const newPost = await AppSyncAPI.createPost(post);
-      console.log("Post saved successfully!");
-      this.props.callback(newPost);
+      console.log("Post saved successfully!", newPost);
+      this.props.close()
     } catch (error) {
       console.log("Error saving post", error);
     }
