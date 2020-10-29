@@ -3,10 +3,8 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {DataStore} from "@aws-amplify/datastore";
 import {Post} from "../models";
-
-const randomBytes = require('crypto').randomBytes;
+import AppSyncAPI from "../AppSyncAPI";
 
 class NewPost extends React.Component {
 
@@ -27,7 +25,7 @@ class NewPost extends React.Component {
     });
 
     try {
-      const newPost = await DataStore.save(post);
+      const newPost = await AppSyncAPI.createPost(post);
       console.log("Post saved successfully!");
       this.props.callback(newPost);
     } catch (error) {

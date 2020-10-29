@@ -7,10 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import {Link} from "react-router-dom";
 import brain from '../static/icon.png';
 import CircularProgress from "@material-ui/core/CircularProgress";
-import UserPool from "../AWS/CognitoConfig";
 import './../styles/Login.css';
-import Utils from '../utils/Congito'
-import {CognitoUser, AuthenticationDetails} from 'amazon-cognito-identity-js'
+import {AuthenticationDetails} from 'amazon-cognito-identity-js'
 import CognitoUtils from "../utils/Congito";
 
 class Login extends React.Component {
@@ -33,6 +31,7 @@ class Login extends React.Component {
         localStorage.setItem('isLoggedIn', "true");
         localStorage.setItem('username', this.state.email);
         this.props.reloadPage();
+        this.props.login();
       },
       onFailure: err => {
         this.setState({email: "", password: "", errorMessage: err.message, loading: false});
@@ -57,9 +56,9 @@ class Login extends React.Component {
             <img src={brain} alt="logo" className="img"/>
             <Typography color="error" gutterBottom>{this.state.errorMessage}</Typography>
             <form className="form" onSubmit={this.handleSubmit}>
-              <TextField required label="Email" fullWidth
+              <TextField required label="Email" fullWidth value={this.state.email}
                          onChange={event => this.setState({email: event.target.value})}/>
-              <TextField required label="Password" type="password" fullWidth
+              <TextField required label="Password" type="password" fullWidth value={this.state.password}
                          onChange={event => this.setState({password: event.target.value})}/>
               <br/><br/>
               <Button type="submit" color="primary" variant="contained" fullWidth disabled={this.state.loading}>

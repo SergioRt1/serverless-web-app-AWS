@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SingUp from "./components/SingUp";
 import HomePage from "./components/HomePage";
+import AppSyncAPI from "./AppSyncAPI";
 
 const theme = createMuiTheme({
   palette: {
@@ -33,9 +34,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: localStorage.getItem('isLoggedIn')
+      isLoggedIn: localStorage.getItem('isLoggedIn'),
+      userCount: 0,
     };
+    this.appSync = new AppSyncAPI();
     this.reloadPage = this.reloadPage.bind(this);
+  }
+
+  countCallback = (userCount) => {
+    this.setState({userCount})
+  }
+
+  logout = () => {
+    this.appSync.cancel()
+  }
+
+  login = () => {
+    this.appSync.listenAppSync(this.countCallback)
   }
 
   reloadPage = () => {
@@ -48,12 +63,12 @@ class App extends React.Component {
         {this.state.isLoggedIn === 'true' ?
           <BrowserRouter>
             <Switch>
-              <Route exact path="/" render={() => <HomePage reloadPage={this.reloadPage}/>}/>
+              <Route exact path="/" render={() => <HomePage reloadPage={this.reloadPage} logout={this.logout} userCount={this.state.userCount}/>}/>
             </Switch>
           </BrowserRouter>
           : <BrowserRouter>
             <Switch>
-              <Route exact path="/" render={() => <Login reloadPage={this.reloadPage}/>}/>
+              <Route exact path="/" render={() => <Login reloadPage={this.reloadPage} login={this.login}/>}/>
               <Route exact path="/sing-in" render={() => <SingUp/>}/>
             </Switch>
           </BrowserRouter>

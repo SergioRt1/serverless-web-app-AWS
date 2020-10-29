@@ -55,14 +55,14 @@ export const deletePost = /* GraphQL */ `
     }
   }
 `;
-export const createUsers = /* GraphQL */ `
-  mutation CreateUsers(
-    $input: CreateUsersInput!
-    $condition: ModelUsersConditionInput
+export const createUserCount = /* GraphQL */ `
+  mutation CreateUserCount(
+    $input: CreateUserCountInput!
+    $condition: ModelUserCountConditionInput
   ) {
-    createUsers(input: $input, condition: $condition) {
+    createUserCount(input: $input, condition: $condition) {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt
@@ -71,14 +71,14 @@ export const createUsers = /* GraphQL */ `
     }
   }
 `;
-export const updateUsers = /* GraphQL */ `
-  mutation UpdateUsers(
-    $input: UpdateUsersInput!
-    $condition: ModelUsersConditionInput
+export const updateUserCount = /* GraphQL */ `
+  mutation UpdateUserCount(
+    $input: UpdateUserCountInput!
+    $condition: ModelUserCountConditionInput
   ) {
-    updateUsers(input: $input, condition: $condition) {
+    updateUserCount(input: $input, condition: $condition) {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt
@@ -87,14 +87,14 @@ export const updateUsers = /* GraphQL */ `
     }
   }
 `;
-export const deleteUsers = /* GraphQL */ `
-  mutation DeleteUsers(
-    $input: DeleteUsersInput!
-    $condition: ModelUsersConditionInput
+export const deleteUserCount = /* GraphQL */ `
+  mutation DeleteUserCount(
+    $input: DeleteUserCountInput!
+    $condition: ModelUserCountConditionInput
   ) {
-    deleteUsers(input: $input, condition: $condition) {
+    deleteUserCount(input: $input, condition: $condition) {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt

@@ -46,11 +46,11 @@ export const onDeletePost = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUsers = /* GraphQL */ `
-  subscription OnCreateUsers {
-    onCreateUsers {
+export const onCreateUserCount = /* GraphQL */ `
+  subscription OnCreateUserCount {
+    onCreateUserCount {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt
@@ -59,11 +59,11 @@ export const onCreateUsers = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateUsers = /* GraphQL */ `
-  subscription OnUpdateUsers {
-    onUpdateUsers {
+export const onUpdateUserCount = /* GraphQL */ `
+  subscription OnUpdateUserCount {
+    onUpdateUserCount {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt
@@ -72,11 +72,11 @@ export const onUpdateUsers = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteUsers = /* GraphQL */ `
-  subscription OnDeleteUsers {
-    onDeleteUsers {
+export const onDeleteUserCount = /* GraphQL */ `
+  subscription OnDeleteUserCount {
+    onDeleteUserCount {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt

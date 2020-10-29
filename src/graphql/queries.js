@@ -68,14 +68,14 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
-export const syncUsers = /* GraphQL */ `
-  query SyncUsers(
-    $filter: ModelUsersFilterInput
+export const syncUserCounts = /* GraphQL */ `
+  query SyncUserCounts(
+    $filter: ModelUserCountFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncUsers(
+    syncUserCounts(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -83,7 +83,7 @@ export const syncUsers = /* GraphQL */ `
     ) {
       items {
         id
-        content
+        count
         _version
         _deleted
         _lastChangedAt
@@ -95,11 +95,11 @@ export const syncUsers = /* GraphQL */ `
     }
   }
 `;
-export const getUsers = /* GraphQL */ `
-  query GetUsers($id: ID!) {
-    getUsers(id: $id) {
+export const getUserCount = /* GraphQL */ `
+  query GetUserCount($id: ID!) {
+    getUserCount(id: $id) {
       id
-      content
+      count
       _version
       _deleted
       _lastChangedAt
@@ -108,16 +108,16 @@ export const getUsers = /* GraphQL */ `
     }
   }
 `;
-export const listUserss = /* GraphQL */ `
-  query ListUserss(
-    $filter: ModelUsersFilterInput
+export const listUserCounts = /* GraphQL */ `
+  query ListUserCounts(
+    $filter: ModelUserCountFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUserss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listUserCounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        content
+        count
         _version
         _deleted
         _lastChangedAt

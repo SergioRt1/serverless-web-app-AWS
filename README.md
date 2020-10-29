@@ -1,4 +1,5 @@
-#Serverless app with AWS cognito and DynamoDB
+# Serverless app with AWS cognito and DynamoDB
+
 In this laboratory we are trying to create a simple App that uses AWS infrastructure with the following requeriments:
 * The application must allow users to register (create an account).
 * The application must allow users to authenticate using a password.
@@ -9,4 +10,3 @@ In this laboratory we are trying to create a simple App that uses AWS infrastruc
 * The application must updated the post feed and the number of connected users in Real-time.
 * Access to WS must be secure.
 * Implement the simplest minimal application possible.
-

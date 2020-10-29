@@ -4,6 +4,6 @@ type Post @model {
   content: String!
   owner: String!
 }
-type Users @model {
-  content: String!
+type UserCount @model {
+  count: Int!
 }

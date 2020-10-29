@@ -23,10 +23,6 @@ class PostComp extends React.Component {
     },
   });
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Card className={this.classes.root} variant="outlined">

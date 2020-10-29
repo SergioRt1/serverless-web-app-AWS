@@ -8,7 +8,7 @@ import {Redirect} from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserPool from "../AWS/CognitoConfig";
-import {CognitoUser, CognitoUserAttribute} from "amazon-cognito-identity-js";
+import {CognitoUserAttribute} from "amazon-cognito-identity-js";
 import CognitoUtils from '../utils/Congito'
 
 class SingUp extends React.Component {

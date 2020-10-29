@@ -41,8 +41,8 @@ export const schema = {
                 }
             ]
         },
-        "Users": {
-            "name": "Users",
+        "UserCount": {
+            "name": "UserCount",
             "fields": {
                 "id": {
                     "name": "id",
@@ -51,16 +51,16 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "content": {
-                    "name": "content",
+                "count": {
+                    "name": "count",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": true,
                     "attributes": []
                 }
             },
             "syncable": true,
-            "pluralName": "Users",
+            "pluralName": "UserCounts",
             "attributes": [
                 {
                     "type": "model",
@@ -71,5 +71,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "cce098089e78bab5289eca3b45abb8aa"
+    "version": "ea308d2f61a7da2417cf1f4aad403ecc"
 };
