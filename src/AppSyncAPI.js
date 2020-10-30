@@ -69,7 +69,7 @@ class AppSyncAPI {
       variables: {id: "unic_count"},
     })
     if (!count.errors) {
-      callback(count.data.getUserCount);
+      callback(count.data.getUserCount.count);
     } else {
       console.error(count.errors);
     }

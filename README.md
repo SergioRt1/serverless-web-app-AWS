@@ -10,3 +10,30 @@ In this laboratory we are trying to create a simple App that uses AWS infrastruc
 * The application must updated the post feed and the number of connected users in Real-time.
 * Access to WS must be secure.
 * Implement the simplest minimal application possible.
+
+The project has the following architecture:
+
+![](img/diagram.png)
+
+We use Amazon DynamoDB Stream through GraphQL subscriptions to make the Posts reactive, and the userCount
+
+Our graphQL schema is pretty simple:
+
+![](img/schema.png)
+
+With help of AWS Amplify CLI we can build an Amazon CloudFormation schema with all the requirements for the infrastructure including
+AppSync API and the DynamoDB tables and roles, permissions required to communicate the components.
+
+The connection to AWS Cognito is Manual, through the AWS and Cognito SDK
+
+With JavaScript, we manage to create a Full-Stack React Application with help of Amplify Backend API,
+Cognito ensures security using an JWT token for each request
+
+**[Demo](https://main.dngus3a03as8.amplifyapp.com)**
+
+
+## Author
+* **[Sergio Rodríguez](https://github.com/SergioRt1)** 
+  
+## License
+This project is license under the Apache-2.0 License - see the [LICENSE](LICENSE) file for more details.

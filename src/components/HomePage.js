@@ -48,7 +48,7 @@ class HomePage extends React.Component {
       <React.Fragment>
         <CssBaseline/>
         <Typography
-          variant={"h6"}> {"Online: " + (this.props.userCount.count === undefined ? 0 : this.props.userCount.count)} </Typography>
+          variant={"h6"}> {"Online: " + this.props.userCount } </Typography>
         <div className="right">
           <Button variant="contained" color="secondary" onClick={this.logout}> Logout</Button>
         </div>
