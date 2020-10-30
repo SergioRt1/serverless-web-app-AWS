@@ -47,7 +47,7 @@ class SingUp extends React.Component {
         this.setState({errorMessage: err.message, loading: false});
       } else {
         console.log(data);
-        this.setState({email: "", password: "", confirmPassword: "", doRedirect: true, loading: false});
+        this.setState({password: "", confirmPassword: "", errorMessage: "", loading: false, verify: true});
       }
     });
   }
@@ -90,28 +90,32 @@ class SingUp extends React.Component {
           <img src={user} alt="user" className="img"/>
           <Typography color="error" gutterBottom>{this.state.errorMessage}</Typography>
           {this.state.verify ?
-            <form className="form" onSubmit={this.handleVerify}>
-              <TextField required label="Email" fullWidth value={this.state.email}
-                         onChange={event => this.setState({email: event.target.value})}/>
-              <TextField required label="Code" fullWidth value={this.state.code}
-                         onChange={event => this.setState({code: event.target.value})}/>
-              <br/><br/>
-              <Button type="submit" color="primary" variant="contained" fullWidth disabled={this.state.loading}>
-                Verify
-              </Button>
-              <br/><br/>
-              <Button type="button" onClick={this.clear} color="primary" variant="contained" fullWidth
-                      disabled={this.state.loading}>
-                Clear
-              </Button>
+            <>
+              <Typography gutterBottom color="primary">Type the verification code from your email</Typography>
+              <form className="form" onSubmit={this.handleVerify}>
+                <TextField required label="Email" fullWidth value={this.state.email}
+                           onChange={event => this.setState({email: event.target.value})}/>
+                <TextField required label="Code" fullWidth value={this.state.code}
+                           onChange={event => this.setState({code: event.target.value})}/>
+                <br/><br/>
+                <Button type="submit" color="primary" variant="contained" fullWidth disabled={this.state.loading}>
+                  Verify
+                </Button>
+                <br/><br/>
+                <Button type="button" onClick={this.clear} color="primary" variant="contained" fullWidth
+                        disabled={this.state.loading}>
+                  Clear
+                </Button>
 
-            </form> :
+              </form>
+            </> :
             <form className="form" onSubmit={this.handleCreate}>
               <TextField required label="Email" fullWidth value={this.state.email}
                          onChange={event => this.setState({email: event.target.value})}/>
               <TextField required label="Password" type="password" fullWidth value={this.state.password}
                          onChange={event => this.setState({password: event.target.value})}/>
-              <TextField required label="Confirm password" type="password" fullWidth value={this.state.confirmPassword}
+              <TextField required label="Confirm password" type="password" fullWidth
+                         value={this.state.confirmPassword}
                          onChange={event => this.setState({confirmPassword: event.target.value})}/>
               <br/><br/>
               <Button type="submit" color="primary" variant="contained" fullWidth disabled={this.state.loading}>

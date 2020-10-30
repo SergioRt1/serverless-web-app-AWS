@@ -24,12 +24,20 @@ Our graphQL schema is pretty simple:
 With help of AWS Amplify CLI we can build an Amazon CloudFormation schema with all the requirements for the infrastructure including
 AppSync API and the DynamoDB tables and roles, permissions required to communicate the components.
 
+![](img/generate.png)
+
+![](img/data_souces.png)
+
+![](img/db.png)
+
 The connection to AWS Cognito is Manual, through the AWS and Cognito SDK
 
 With JavaScript, we manage to create a Full-Stack React Application with help of Amplify Backend API,
-Cognito ensures security using an JWT token for each request
+Cognito ensures security using an JWT token for each request with the API, also provide email verification.
 
 **[Demo](https://main.dngus3a03as8.amplifyapp.com)**
+
+![](img/demo.gif)
 
 
 ## Author
