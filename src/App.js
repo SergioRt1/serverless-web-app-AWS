@@ -36,7 +36,7 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: localStorage.getItem('isLoggedIn'),
       userCount: 0,
-      posts: []
+      posts: [],
     };
     this.appSync = new AppSyncAPI();
     this.reloadPage = this.reloadPage.bind(this);
@@ -52,8 +52,8 @@ class App extends React.Component {
 
   addPost = (newPost) => {
     this.setState((state) => {
-      return {posts: [...state.posts, newPost]};
-    })
+      return {posts: [newPost, ...state.posts]};
+    });
   }
 
   loadData = () => {
@@ -63,7 +63,6 @@ class App extends React.Component {
   }
 
   logout = () => {
-    this.appSync.cancel();
     this.appSync.increaseUserCountBy(-1);
   }
 

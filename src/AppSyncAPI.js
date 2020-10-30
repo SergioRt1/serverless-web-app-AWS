@@ -31,8 +31,12 @@ class AppSyncAPI {
   }
 
   static async createAsync(client, newPost) {
-    const result = await client.mutate({mutation: gql(createPost), fetchPolicy: "no-cache", variables: {input: newPost}});
-    if(!result.errors)
+    const result = await client.mutate({
+      mutation: gql(createPost),
+      fetchPolicy: "no-cache",
+      variables: {input: newPost}
+    });
+    if (!result.errors)
       return result.data.createPost
     else
       throw result.errors
@@ -77,14 +81,14 @@ class AppSyncAPI {
       query: gql(getUserCount),
       fetchPolicy: "network-only",
       variables: {id: "unic_count"},
-    })
+    });
     if (!count.errors) {
       const current = count.data.getUserCount
       console.log("Received GraphQL data: ", count.data)
       const newCount = await client.mutate({
         mutation: gql(updateUserCount),
         fetchPolicy: "no-cache",
-        variables: {input: {id: current.id, count: current.count + number}},
+        variables: {input: {id: current.id, count: current.count + number, _version: current._version}},
       });
       console.log("Received GraphQL data: ", newCount)
     }
